@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Verification</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        /* Form Styling */
+        #uploadForm {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #uploadForm label {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        #uploadForm input[type="file"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            background-color: #f9f9f9;
+            font-size: 1rem;
+        }
+
+        #uploadForm button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #uploadForm button:hover {
+            background-color: #45a049;
+        }
+
+        /* Result Styling */
+        #result {
+            font-weight: bold;
+            color: #2f9e44;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            #uploadForm {
+                width: 90%;
+                padding: 30px;
+            }
+
+            #uploadForm button {
+                width: 100%;
+            }
+        }
+
+        /* Custom Scrollbar for Form */
+        #uploadForm input[type="file"]::-webkit-file-upload-button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Signature Verification</h1>
+
+    <!-- Form to upload a signature image -->
+    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+        <label for="signature_image">Upload Signature Image:</label>
+        <input type="file" name="signature_image" id="signature_image" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Result: <span id="result"></span></h2>
+
+    <script>
+        // Handle form submission
+        const form = document.querySelector('#uploadForm');
+        form.onsubmit = async function(event) {
+            event.preventDefault();
+
+            // Get the form data
+            const formData = new FormData(form);
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            // Handle response from server
+            const result = await response.json();
+            const resultText = result.result || result.error;  // Show the result or error
+            document.querySelector('#result').innerText = resultText;  // Display the result in the HTML
+        };
+    </script>
+</body>
+</html>
